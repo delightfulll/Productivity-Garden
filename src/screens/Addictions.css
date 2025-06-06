@@ -1,0 +1,142 @@
+.addictions-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.addictions-container h1 {
+    text-align: center;
+    color: #2d3748;
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+}
+
+.stats-container {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    margin-bottom: 3rem;
+}
+
+.streak-card, .progress-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    min-width: 200px;
+    transition: transform 0.3s ease;
+}
+
+.streak-icon, .progress-icon {
+    font-size: 2rem;
+    color: #4299e1;
+    margin-bottom: 1rem;
+}
+
+.streak-card h2, .progress-card h2 {
+    font-size: 2.5rem;
+    color: #2d3748;
+    margin: 0.5rem 0;
+}
+
+.streak-card p, .progress-card p {
+    color: #718096;
+    margin: 0;
+}
+
+.check-in-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.button-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+.yes-button, .no-button {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.yes-button {
+    background: #48bb78;
+    color: white;
+}
+
+.no-button {
+    background: #f56565;
+    color: white;
+}
+
+.history-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.history-container h3 {
+    color: #2d3748;
+    margin-bottom: 1.5rem;
+}
+
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.history-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background: #f7fafc;
+}
+
+.history-item.clean {
+    border-left: 4px solid #48bb78;
+}
+
+.history-item.slipped {
+    border-left: 4px solid #f56565;
+}
+
+.history-item svg {
+    color: #718096;
+}
+
+.history-item span {
+    color: #4a5568;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+    .stats-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .addictions-container {
+        padding: 1rem;
+    }
+} 
