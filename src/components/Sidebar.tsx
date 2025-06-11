@@ -1,11 +1,11 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import "../App.css";
-
+import "../styles/App.css";
+import logo from "../assets/logo.png";
 function Sidebar() {
   return (
     <div className="sidebar">
-      <h1 className="sidebar-title">Productivity Garden</h1>
+      <img src={logo} alt="logo" className="logo" />
 
       {/* Main Navigation */}
       <div className="nav-section">
@@ -45,6 +45,12 @@ function Sidebar() {
           className={({ isActive }) => `nav-button ${isActive ? "active" : ""}`}
         >
           TimeBlocking
+        </NavLink>
+        <NavLink
+          to="/timer"
+          className={({ isActive }) => `nav-button ${isActive ? "active" : ""}`}
+        >
+          Timer
         </NavLink>
       </div>
 

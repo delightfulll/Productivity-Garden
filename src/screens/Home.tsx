@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
-import "../App.css";
+import "../styles/App.css";
 import Sidebar from "../components/Sidebar";
 import { motion, Reorder, AnimatePresence } from "framer-motion";
 import { FaPlus, FaGripVertical } from "react-icons/fa";
-import "../index.css";
+import "../styles/index.css";
 import CustomCalendar from "../components/calendar";
 import CelebrationParticles from "../components/CelebrationParticles";
 function Home() {

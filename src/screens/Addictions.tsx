@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaFire, FaCalendarCheck, FaChartLine } from "react-icons/fa";
-import "../App.css";
+import "../styles/App.css";
 import Sidebar from "../components/Sidebar";
-import "./Addictions.css";
+import "../styles/Addictions.css";
 
 function Addictions() {
   const [streak, setStreak] = useState(0);

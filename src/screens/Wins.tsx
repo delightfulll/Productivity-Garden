@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../App.css";
+import "../styles/App.css";
 import Sidebar from "../components/Sidebar";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaPlus, FaTimes, FaSave } from "react-icons/fa";
