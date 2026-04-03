@@ -23,13 +23,13 @@
 ### Frontend
 
 | Technology          | Purpose                         |
-| ------------------- | ------------------------------- | --- |
+| ------------------- | ------------------------------- |
 | **React**           | UI framework                    |
 | **TypeScript**      | Type safety across the codebase |
 | **Vite**            | Fast dev server & build tool    |
 | **Tailwind CSS v4** | Utility-first styling           |
 | **Framer Motion**   | Animations & drag-and-drop      |
-| **React Router v7** | Client-side navigation          |     |
+| **React Router v7** | Client-side navigation          |
 
 ### Backend
 
