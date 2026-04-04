@@ -10,6 +10,7 @@ import journalRoutes from "./routes/journal";
 import winsRoutes from "./routes/wins";
 import timeblockingRoutes from "./routes/timeblocking";
 import addictionsRoutes from "./routes/addictions";
+import milestonesRoutes from "./routes/milestones";
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.use("/api/journal", journalRoutes);
 app.use("/api/wins", winsRoutes);
 app.use("/api/timeblocking", timeblockingRoutes);
 app.use("/api/addictions", addictionsRoutes);
+app.use("/api/milestones", milestonesRoutes);
 
 app.listen(process.env.PORT || 3000, () => {
   console.log(`Server is running on port ${process.env.PORT || 3000}`);

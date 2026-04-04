@@ -1,0 +1,286 @@
+/* ── Preset Duration Buttons ──────────────────────────────────── */
+.timer-presets {
+  display: flex;
+  gap: 0.35rem;
+  background: white;
+  border-radius: 12px;
+  padding: 0.35rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+  border: 1px solid #e5e7eb;
+  width: fit-content;
+  margin-bottom: 1.75rem;
+}
+
+.timer-preset-btn {
+  position: relative;
+  padding: 0.5rem 1.25rem;
+  border: none;
+  background: transparent;
+  border-radius: 9px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.timer-preset-btn:hover:not(:disabled) {
+  color: #22c55e;
+}
+
+.timer-preset-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.timer-preset-active {
+  color: #16a34a !important;
+  background: #f0fdf4;
+}
+
+/* ── Timer Card ───────────────────────────────────────────────── */
+.timer-card {
+  background: white;
+  border-radius: 20px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 2.5rem 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.75rem;
+  margin-bottom: 1.75rem;
+  max-width: 480px;
+}
+
+/* ── Circular Ring ────────────────────────────────────────────── */
+.timer-ring-wrapper {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+
+.timer-ring {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.timer-ring-bg {
+  fill: none;
+  stroke: #f3f4f6;
+  stroke-width: 10;
+}
+
+.timer-ring-progress {
+  fill: none;
+  stroke-width: 10;
+  stroke-linecap: round;
+  transition: stroke 0.4s ease;
+}
+
+.timer-display {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+.timer-digits {
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: #1f2937;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.timer-status-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: color 0.3s ease;
+}
+
+.timer-status-running {
+  color: #22c55e;
+}
+
+/* ── Controls ─────────────────────────────────────────────────── */
+.timer-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.timer-play-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  background: #22c55e;
+  color: white;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(34, 197, 94, 0.35);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.timer-play-btn-pause {
+  background: #ef4444;
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3);
+}
+
+.timer-reset-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid #e5e7eb;
+  background: white;
+  color: #6b7280;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.timer-reset-btn:hover {
+  border-color: #22c55e;
+  color: #22c55e;
+}
+
+/* ── Task Card ────────────────────────────────────────────────── */
+.timer-task-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: white;
+  border-radius: 12px;
+  border: 1.5px solid #e5e7eb;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  gap: 1rem;
+}
+
+.timer-task-card-selected {
+  border-color: #86efac;
+  background: #f0fdf4;
+}
+
+.timer-task-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.timer-task-category-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.timer-task-text {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #1f2937;
+  margin: 0 0 0.15rem;
+}
+
+.timer-task-category {
+  font-size: 0.78rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.timer-change-task-btn {
+  padding: 0.4rem 0.9rem;
+  background: white;
+  border: 1.5px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.timer-change-task-btn:hover {
+  border-color: #22c55e;
+  color: #16a34a;
+}
+
+/* ── Task Selection Modal ─────────────────────────────────────── */
+.timer-modal-content {
+  background: white;
+  border-radius: 16px;
+  padding: 1.75rem;
+  width: 90%;
+  max-width: 480px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.timer-modal-section {
+  margin-top: 1.25rem;
+}
+
+.timer-modal-section-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 0.5rem;
+}
+
+.timer-modal-task-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 10px;
+  border: 1.5px solid #f3f4f6;
+  margin-bottom: 0.4rem;
+  cursor: pointer;
+  background: #fafafa;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.timer-modal-task-item:hover {
+  border-color: #86efac;
+  background: #f0fdf4;
+}
+
+.timer-modal-task-selected {
+  border-color: #22c55e !important;
+  background: #f0fdf4 !important;
+}
+
+.timer-modal-task-text {
+  font-size: 0.9rem;
+  color: #1f2937;
+  font-weight: 500;
+  margin: 0 0 0.1rem;
+}
+
+.timer-modal-task-date {
+  font-size: 0.78rem;
+  color: #9ca3af;
+}

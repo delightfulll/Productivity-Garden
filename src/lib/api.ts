@@ -139,6 +139,30 @@ export const timeblockingApi = {
     request<{ message: string }>(`/api/timeblocking/${id}`, { method: "DELETE" }),
 };
 
+// ── Milestones ────────────────────────────────────────────────
+
+export interface Milestone {
+  id: number;
+  user_id: number;
+  title: string;
+  description: string;
+  horizon: "long" | "mid" | "short";
+  achieved: boolean;
+  target_date: string;
+  created_at: string;
+}
+
+export const milestonesApi = {
+  list: (horizon?: string) =>
+    request<Milestone[]>(`/api/milestones?userId=${USER_ID}${horizon ? `&horizon=${horizon}` : ""}`),
+  create: (data: { title: string; horizon: "long" | "mid" | "short"; description?: string; target_date?: string }) =>
+    request<Milestone>("/api/milestones", { method: "POST", body: JSON.stringify({ user_id: USER_ID, ...data }) }),
+  update: (id: number, data: Partial<{ title: string; description: string; target_date: string; achieved: boolean; horizon: string }>) =>
+    request<Milestone>(`/api/milestones/${id}`, { method: "PUT", body: JSON.stringify(data) }),
+  delete: (id: number) =>
+    request<{ message: string }>(`/api/milestones/${id}`, { method: "DELETE" }),
+};
+
 // ── Addictions ────────────────────────────────────────────────
 
 export interface Checkin {
