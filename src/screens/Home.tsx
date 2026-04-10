@@ -250,29 +250,7 @@ function Home() {
   const { confirm } = useConfirm();
   const { dayKey, selectedDate, setDayFromDate } = useDayParam();
   const [activeTab, setActiveTab] = useState<ActiveTab>("tasks");
-  const [showConfetti, setShowConfetti] = useState(false);
-  const [confettiPosition, setConfettiPosition] = useState({
-    x: window.innerWidth / 2,
-    y: window.innerHeight / 2,
-  });
-  const [completedTaskId, setCompletedTaskId] = useState<number | null>(null);
   const taskRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
-  const [windowSize, setWindowSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  });
-
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   const [wateringTasks, setWateringTasks] = useState<Task[]>([]);
   const [sunlightTasks, setSunlightTasks] = useState<Task[]>([]);
@@ -315,10 +293,6 @@ function Home() {
 
   const handleTaskComplete = useCallback(
     (taskId: number, category: string, currentCompleted: boolean) => {
-      const taskElement = taskRefs.current[taskId];
-      if (!taskElement) return;
-
-      const rect = taskElement.getBoundingClientRect();
       const newCompleted = !currentCompleted;
 
       const updateTasks = (tasks: Task[]) =>
@@ -346,7 +320,7 @@ function Home() {
           refreshStats();
         });
     },
-    [taskRefs, refreshStats],
+    [refreshStats],
   );
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -450,24 +424,6 @@ function Home() {
 
   return (
     <div className="app-container">
-      <AnimatePresence>
-        {
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              pointerEvents: "none",
-              zIndex: 1000,
-            }}
-          ></motion.div>
-        }
-      </AnimatePresence>
       <Sidebar />
 
       {/* Main Content Area */}
