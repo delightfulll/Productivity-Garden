@@ -1,20 +1,21 @@
 # Productivity Garden
 
-A productivity app I made because goalsumo got shut down and notion wasn't cutting it
+A productivity app I made because goalsumo got shut down and notion wasn't cutting it.
 
 ---
 
 ## Features
 
+| Feature              | Description                                                           |
 | -------------------- | --------------------------------------------------------------------- |
-| **Task categories** | Watering, Sunlight, and Composting columns with drag-and-drop reorder |
-| **Day-aware tasks** | Tasks tied to calendar days; roll over to the next day |
-| **Goals & backlog** | Goals, backlog, and milestone-style journey views |
-| **Calendar** | Month view and time blocking |
-| **Journal & wins** | Daily journal entries and wins tracking |
-| **Focus & recovery** | Timer/focus tools and addictions/recovery screens |
-| **Progress** | XP, levels, streaks, and profile stats |
-| **Auth** | Register, login, and JWT-based sessions |
+| **Task categories**  | Watering, Sunlight, and Composting columns with drag-and-drop reorder |
+| **Day-aware tasks**  | Tasks tied to calendar days; roll over to the next day                |
+| **Goals & backlog**  | Goals, backlog, and milestone-style journey views                     |
+| **Calendar**         | Month view and time blocking                                          |
+| **Journal & wins**   | Daily journal entries and wins tracking                               |
+| **Focus & recovery** | Timer/focus tools and addictions/recovery screens                     |
+| **Progress**         | XP, levels, streaks, and profile stats                                |
+| **Auth**             | Register, login, and JWT-based sessions                               |
 
 ---
 
@@ -26,7 +27,7 @@ A productivity app I made because goalsumo got shut down and notion wasn't cutti
 | **Backend API**      | **Google Cloud Run** (recommended)             | Runs the Express API from the Docker image built in this repo. Scales to zero, HTTPS URL, `PORT` injected automatically.                             |
 | **Container images** | **Artifact Registry**                          | Stores the backend Docker image produced by the build pipeline.                                                                                      |
 | **Build pipeline**   | **Cloud Build**                                | `cloudbuild.yaml` builds `backend/Dockerfile` and pushes the image to Artifact Registry (substitute your image name and run `gcloud builds submit`). |
-| **Database**         | **Cloud SQL for PostgreSQL** (or any Postgres) | The API expects PostgreSQL via `DB_*` env vars—Cloud SQL is the usual choice on GCP with a private or public IP and credentials in Secret Manager.   |
+| **Database**         | **Cloud SQL for PostgreSQL** (or any Postgres) | The API expects PostgreSQL via `DB_*` env vars. Cloud SQL is the usual choice on GCP; use Secret Manager for credentials.                            |
 
 **Frontend environment:** set `VITE_API_BASE_URL` in Vercel to your API’s public URL (no trailing slash), e.g. `https://your-service-xxxxx.run.app`, then redeploy so the client bundle points at production.
 
@@ -38,21 +39,23 @@ A productivity app I made because goalsumo got shut down and notion wasn't cutti
 
 ### Frontend
 
-| ------------------- | ------------------------------------------------------- |
-| **React** | UI |
-| **TypeScript** | Shared typing |
-| **Vite** | Dev server and production build |
-| **Tailwind CSS v4** | Styling (`@tailwindcss/vite`) |
-| **Framer Motion** | Animations and reorder |
-| **React Router** | Client-side routing (`vercel.json` rewrites SPA routes) |
+| Technology          | Purpose                         |
+| ------------------- | ------------------------------- |
+| **React**           | UI                              |
+| **TypeScript**      | Typechecking Language           |
+| **Vite**            | Dev server and production build |
+| **Tailwind CSS v4** | Styling                         |
+| **Framer Motion**   | Animations and reorder          |
+| **React Router**    | Client-side routing             |
 
 ### Backend
 
-| --------------------- | ----------------------------------------- |
-| **Node.js + Express** | REST API |
-| **TypeScript** | Compiled with `tsc`; local dev with `tsx` |
-| **PostgreSQL** | Primary data store (`pg`) |
-| **JWT + bcrypt** | Auth |
+| Technology            | Purpose               |
+| --------------------- | --------------------- |
+| **Node.js + Express** | REST API              |
+| **TypeScript**        | Typechecking Language |
+| **PostgreSQL**        | Database              |
+| **JWT + bcrypt**      | Auth                  |
 
 ---
 
