@@ -30,7 +30,7 @@ function Sidebar() {
     });
     if (!ok) return;
     logout();
-    navigate("/auth");
+    navigate("/login");
   };
 
   const navClass = ({ isActive }: { isActive: boolean }) =>

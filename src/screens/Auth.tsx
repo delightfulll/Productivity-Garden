@@ -38,7 +38,7 @@ function Auth() {
     setLoading(true);
 
     try {
-      const endpoint = mode === "login" ? "/api/auth/login" : "/api/auth/register";
+      const endpoint = mode === "login" ? "/api/login" : "/api/register";
       const body =
         mode === "login"
           ? { email, password }

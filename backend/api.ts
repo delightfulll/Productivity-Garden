@@ -25,7 +25,7 @@ app.get("/health", (_req, res) => {
   res.status(200).json({ message: "Server is running" });
 });
 
-app.use("/api/auth", authRoutes);
+app.use("/api", authRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/goals", goalRoutes);

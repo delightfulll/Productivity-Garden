@@ -38,7 +38,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
-    fetch(`${BASE}/api/auth/me`, {
+    fetch(`${BASE}/api/me`, {
       headers: { Authorization: `Bearer ${saved}` },
     })
       .then((res) => {

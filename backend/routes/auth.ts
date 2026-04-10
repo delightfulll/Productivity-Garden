@@ -11,7 +11,7 @@ function signToken(userId: number): string {
   return jwt.sign({ userId }, process.env.JWT_SECRET as string, { expiresIn: "7d" });
 }
 
-// POST /api/auth/register
+// POST /api/register
 // Body: { name, email, password }
 router.post("/register", async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
@@ -47,12 +47,12 @@ router.post("/register", async (req: Request, res: Response) => {
 
     res.status(201).json({ token, user });
   } catch (err) {
-    console.error("POST /auth/register error:", err);
+    console.error("POST /register error:", err);
     res.status(500).json({ error: "Failed to register" });
   }
 });
 
-// POST /api/auth/login
+// POST /api/login
 // Body: { email, password }
 router.post("/login", async (req: Request, res: Response) => {
   const { email, password } = req.body;
@@ -86,12 +86,12 @@ router.post("/login", async (req: Request, res: Response) => {
 
     res.json({ token, user: safeUser });
   } catch (err) {
-    console.error("POST /auth/login error:", err);
+    console.error("POST /login error:", err);
     res.status(500).json({ error: "Failed to log in" });
   }
 });
 
-// GET /api/auth/me  (requires token)
+// GET /api/me  (requires token)
 router.get("/me", requireAuth, async (req: AuthRequest, res: Response) => {
   try {
     const result = await pool.query(
@@ -106,7 +106,7 @@ router.get("/me", requireAuth, async (req: AuthRequest, res: Response) => {
 
     res.json(result.rows[0]);
   } catch (err) {
-    console.error("GET /auth/me error:", err);
+    console.error("GET /me error:", err);
     res.status(500).json({ error: "Failed to fetch user" });
   }
 });

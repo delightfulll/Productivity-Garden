@@ -27,7 +27,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   }
 
   if (!user) {
-    return <Navigate to="/auth" replace />;
+    return <Navigate to="/login" replace />;
   }
 
   return <>{children}</>;
@@ -43,7 +43,7 @@ function AppRoutes() {
     <Routes>
       {/* Public */}
       <Route
-        path="/auth"
+        path="/login"
         element={user ? <Navigate to="/" replace /> : <Auth />}
       />
 
