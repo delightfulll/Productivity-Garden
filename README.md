@@ -1,13 +1,12 @@
 # Productivity Garden
 
-A productivity app for goals, daily tasks, journaling, wins, and focus sessions—organized around a “garden” metaphor: water what matters, give sunlight to your priorities, and compost the rest.
+A productivity app I made because goalsumo got shut down and notion wasn't cutting it
 
 ---
 
 ## Features
 
-| | |
-| --- | --- |
+| -------------------- | --------------------------------------------------------------------- |
 | **Task categories** | Watering, Sunlight, and Composting columns with drag-and-drop reorder |
 | **Day-aware tasks** | Tasks tied to calendar days; roll over to the next day |
 | **Goals & backlog** | Goals, backlog, and milestone-style journey views |
@@ -21,13 +20,13 @@ A productivity app for goals, daily tasks, journaling, wins, and focus sessions�
 
 ## Deployment architecture
 
-| Layer | Service | Role |
-| --- | --- | --- |
-| **Frontend** | [Vercel](https://vercel.com) | Hosts the Vite/React app (static build, CDN, HTTPS). Connects to your Git repo for automatic deploys on push. |
-| **Backend API** | **Google Cloud Run** (recommended) | Runs the Express API from the Docker image built in this repo. Scales to zero, HTTPS URL, `PORT` injected automatically. |
-| **Container images** | **Artifact Registry** | Stores the backend Docker image produced by the build pipeline. |
-| **Build pipeline** | **Cloud Build** | `cloudbuild.yaml` builds `backend/Dockerfile` and pushes the image to Artifact Registry (substitute your image name and run `gcloud builds submit`). |
-| **Database** | **Cloud SQL for PostgreSQL** (or any Postgres) | The API expects PostgreSQL via `DB_*` env vars—Cloud SQL is the usual choice on GCP with a private or public IP and credentials in Secret Manager. |
+| Layer                | Service                                        | Role                                                                                                                                                 |
+| -------------------- | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Frontend**         | [Vercel](https://vercel.com)                   | Hosts the Vite/React app (static build, CDN, HTTPS). Connects to your Git repo for automatic deploys on push.                                        |
+| **Backend API**      | **Google Cloud Run** (recommended)             | Runs the Express API from the Docker image built in this repo. Scales to zero, HTTPS URL, `PORT` injected automatically.                             |
+| **Container images** | **Artifact Registry**                          | Stores the backend Docker image produced by the build pipeline.                                                                                      |
+| **Build pipeline**   | **Cloud Build**                                | `cloudbuild.yaml` builds `backend/Dockerfile` and pushes the image to Artifact Registry (substitute your image name and run `gcloud builds submit`). |
+| **Database**         | **Cloud SQL for PostgreSQL** (or any Postgres) | The API expects PostgreSQL via `DB_*` env vars—Cloud SQL is the usual choice on GCP with a private or public IP and credentials in Secret Manager.   |
 
 **Frontend environment:** set `VITE_API_BASE_URL` in Vercel to your API’s public URL (no trailing slash), e.g. `https://your-service-xxxxx.run.app`, then redeploy so the client bundle points at production.
 
@@ -39,8 +38,7 @@ A productivity app for goals, daily tasks, journaling, wins, and focus sessions�
 
 ### Frontend
 
-| | |
-| --- | --- |
+| ------------------- | ------------------------------------------------------- |
 | **React** | UI |
 | **TypeScript** | Shared typing |
 | **Vite** | Dev server and production build |
@@ -50,8 +48,7 @@ A productivity app for goals, daily tasks, journaling, wins, and focus sessions�
 
 ### Backend
 
-| | |
-| --- | --- |
+| --------------------- | ----------------------------------------- |
 | **Node.js + Express** | REST API |
 | **TypeScript** | Compiled with `tsc`; local dev with `tsx` |
 | **PostgreSQL** | Primary data store (`pg`) |
@@ -82,79 +79,3 @@ productivity-garden/
 ├── vercel.json         # SPA fallback for client-side routes
 └── vite.config.js      # React + Tailwind plugins (must be in git for Vercel)
 ```
-
----
-
-## Getting started
-
-### 1. Clone and install
-
-```bash
-git clone https://github.com/delightfulll/productivity-garden.git
-cd productivity-garden
-npm install
-cd backend && npm install && cd ..
-```
-
-### 2. Database
-
-Create a PostgreSQL database and apply the schema:
-
-```bash
-psql -U <user> -d <database> -f backend/db/schema.sql
-```
-
-Run additional SQL under `backend/db/migrations/` if your database predates newer columns (the API also runs some idempotent `ensure_*` steps on startup).
-
-### 3. Backend environment
-
-```bash
-cp backend/.env.example backend/.env
-# Set DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME, JWT_SECRET
-```
-
-### 4. Frontend environment (local)
-
-Optional `.env` at the repo root for Vite:
-
-```bash
-# .env.local
-VITE_API_BASE_URL=http://localhost:3000
-```
-
-### 5. Run locally
-
-```bash
-# Terminal 1 — API (from backend/)
-cd backend && npx tsx api.ts
-
-# Terminal 2 — UI (from repo root)
-npm run dev
-```
-
-Open the URL Vite prints (usually `http://localhost:5173`).
-
-### Docker (API only)
-
-```bash
-docker compose up --build
-```
-
-Uncomment `env_file` in `docker-compose.yml` or pass `DB_*` / `JWT_SECRET` so the container can reach Postgres.
-
----
-
-## Scripts
-
-| Command | Where | Purpose |
-| --- | --- | --- |
-| `npm run dev` | root | Vite dev server |
-| `npm run build` | root | Production frontend build → `dist/` |
-| `npm run build` | `backend/` | Compile TypeScript → `backend/dist/` |
-| `npm start` | `backend/` | Run `node dist/api.js` after build |
-
----
-
-## License
-
-Private / personal use unless you add a license file.
