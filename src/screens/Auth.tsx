@@ -3,9 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaSeedling } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
+import { API_BASE } from "../lib/api";
 import "../styles/App.css";
-
-const BASE = "http://localhost:3000";
 
 type Mode = "login" | "register";
 
@@ -44,7 +43,7 @@ function Auth() {
           ? { email, password }
           : { name, email, password };
 
-      const res = await fetch(`${BASE}${endpoint}`, {
+      const res = await fetch(`${API_BASE}${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),

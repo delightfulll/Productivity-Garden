@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
-
-const BASE = "http://localhost:3000";
+import { API_BASE } from "../lib/api";
 
 export interface AuthUser {
   id: number;
@@ -38,7 +37,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
-    fetch(`${BASE}/api/me`, {
+    fetch(`${API_BASE}/api/me`, {
       headers: { Authorization: `Bearer ${saved}` },
     })
       .then((res) => {
