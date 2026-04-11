@@ -13,7 +13,7 @@ A productivity app I made because goalsumo got shut down and notion wasn't cutti
 | **Goals & backlog**  | Goals, backlog, and milestone-style journey views                         |
 | **Calendar**         | Month view and Daily View                                                 |
 | **Journal & wins**   | Daily journal entries and wins tracking                                   |
-| **Focus & recovery** | Pomodero Timer and addiction recovery checkin's                           |
+| **Focus & recovery** | Pomodero Timer and addiction recovery checkins                            |
 | **Progress**         | XP, levels, streaks, and profile stats to keep track of progress          |
 
 ---
