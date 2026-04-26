@@ -26,13 +26,14 @@ import { useStats } from "../context/StatsContext";
 import Goals from "./Goals";
 import Backlog from "./Backlog";
 import GoalFocus from "../components/GoalFocus";
+import HabitList from "../components/HabitList";
 import { playTaskCompleteSound } from "../lib/taskCompleteSound";
 import { useConfirm, useConfirmDeletion } from "../context/ConfirmContext";
 import { useDayParam } from "../hooks/useDayParam";
 import { taskBelongsOnDay, parseLocalDayKey } from "../lib/dateUtils";
 import { useAuth } from "../context/AuthContext";
 
-type ActiveTab = "tasks" | "goals" | "backlog";
+type ActiveTab = "tasks" | "habits" | "goals" | "backlog";
 interface TaskItemProps {
   task: Task;
   category: string;
@@ -473,7 +474,7 @@ function Home() {
 
           {/* Tab Navigation */}
           <div className="home-tabs">
-            {(["tasks", "goals", "backlog"] as ActiveTab[]).map((tab) => (
+            {(["tasks", "habits", "goals", "backlog"] as ActiveTab[]).map((tab) => (
               <button
                 key={tab}
                 className={`home-tab-btn ${activeTab === tab ? "home-tab-active" : ""}`}
@@ -524,6 +525,14 @@ function Home() {
                 taskRefs={taskRefs}
               />
             </div>
+          )}
+
+          {activeTab === "habits" && (
+            <HabitList
+              endDateKey={dayKey}
+              title="Habits"
+              subtitle="Track each habit across the seven days ending on this calendar date."
+            />
           )}
 
           {activeTab === "goals" && <Goals />}

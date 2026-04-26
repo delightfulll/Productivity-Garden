@@ -10,6 +10,7 @@ import {
   FaHeart,
   FaTh,
   FaStopwatch,
+  FaCheckCircle,
   FaCog,
   FaUser,
   FaSignOutAlt,
@@ -78,6 +79,10 @@ function Sidebar() {
           <NavLink to="/timer" className={navClass}>
             <FaStopwatch className="nav-button-icon" aria-hidden />
             <span>Timer</span>
+          </NavLink>
+          <NavLink to="/habits" className={navClass}>
+            <FaCheckCircle className="nav-button-icon" aria-hidden />
+            <span>Habit Tracker</span>
           </NavLink>
         </div>
       </nav>

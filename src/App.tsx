@@ -13,6 +13,7 @@ import TimeBlocking from "./screens/timeblocking";
 import TimerScreen from "./screens/timerscreen";
 import Settings from "./screens/Settings";
 import Profile from "./screens/Profile";
+import HabitTracker from "./screens/HabitTracker";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -55,6 +56,7 @@ function AppRoutes() {
       <Route path="/addictions" element={<ProtectedRoute><Addictions /></ProtectedRoute>} />
       <Route path="/timeblocking" element={<ProtectedRoute><TimeBlocking /></ProtectedRoute>} />
       <Route path="/timer" element={<ProtectedRoute><TimerScreen /></ProtectedRoute>} />
+      <Route path="/habits" element={<ProtectedRoute><HabitTracker /></ProtectedRoute>} />
       <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
       <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
 

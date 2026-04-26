@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 
-import { ensureJournalEntryDateColumn, ensureMilestonesTable } from "./db/db";
+import { ensureHabitsTables, ensureJournalEntryDateColumn, ensureMilestonesTable } from "./db/db";
 import authRoutes from "./routes/auth";
 import taskRoutes from "./routes/tasks";
 import userRoutes from "./routes/users";
@@ -13,6 +13,7 @@ import winsRoutes from "./routes/wins";
 import timeblockingRoutes from "./routes/timeblocking";
 import addictionsRoutes from "./routes/addictions";
 import milestonesRoutes from "./routes/milestones";
+import habitsRoutes from "./routes/habits";
 
 dotenv.config();
 
@@ -39,11 +40,13 @@ app.use("/api/wins", winsRoutes);
 app.use("/api/timeblocking", timeblockingRoutes);
 app.use("/api/addictions", addictionsRoutes);
 app.use("/api/milestones", milestonesRoutes);
+app.use("/api/habits", habitsRoutes);
 
 const port = Number(process.env.PORT) || 3000;
 
 ensureMilestonesTable()
   .then(() => ensureJournalEntryDateColumn())
+  .then(() => ensureHabitsTables())
   .then(() => {
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);

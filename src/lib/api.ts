@@ -250,3 +250,50 @@ export const addictionsApi = {
       body: JSON.stringify({ user_id: getUserId(), stayed_clean }),
     }),
 };
+
+// ── Habits ─────────────────────────────────────────────────────
+
+export type HabitEntryStatus = "success" | "failed";
+
+export interface HabitEntry {
+  id: number;
+  habit_id: number;
+  entry_date: string;
+  status: HabitEntryStatus;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Habit {
+  id: number;
+  user_id: number;
+  name: string;
+  created_at: string;
+  entries: HabitEntry[];
+}
+
+export const habitsApi = {
+  list: (startDate?: string, endDate?: string) =>
+    request<Habit[]>(
+      `/api/habits?userId=${getUserId()}${startDate && endDate ? `&startDate=${startDate}&endDate=${endDate}` : ""}`,
+    ),
+  create: (name: string) =>
+    request<Habit>("/api/habits", {
+      method: "POST",
+      body: JSON.stringify({ user_id: getUserId(), name }),
+    }),
+  setEntry: (
+    habitId: number,
+    entry_date: string,
+    status: HabitEntryStatus | null,
+  ) =>
+    request<HabitEntry | { habit_id: number; entry_date: string; status: null }>(
+      `/api/habits/${habitId}/entries`,
+      {
+        method: "PUT",
+        body: JSON.stringify({ entry_date, status }),
+      },
+    ),
+  delete: (id: number) =>
+    request<{ message: string }>(`/api/habits/${id}`, { method: "DELETE" }),
+};

@@ -61,4 +61,35 @@ export async function ensureJournalEntryDateColumn(): Promise<void> {
   `);
 }
 
+/** Creates habit tracker tables if missing. */
+export async function ensureHabitsTables(): Promise<void> {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS habits (
+      id         SERIAL PRIMARY KEY,
+      user_id    INTEGER     NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      name       TEXT        NOT NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+  await pool.query(`
+    CREATE INDEX IF NOT EXISTS idx_habits_user_id
+    ON habits (user_id)
+  `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS habit_entries (
+      id         SERIAL PRIMARY KEY,
+      habit_id   INTEGER NOT NULL REFERENCES habits(id) ON DELETE CASCADE,
+      entry_date DATE    NOT NULL,
+      status     TEXT    NOT NULL CHECK (status IN ('success', 'failed')),
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      UNIQUE (habit_id, entry_date)
+    )
+  `);
+  await pool.query(`
+    CREATE INDEX IF NOT EXISTS idx_habit_entries_habit_date
+    ON habit_entries (habit_id, entry_date)
+  `);
+}
+
 export default pool;
