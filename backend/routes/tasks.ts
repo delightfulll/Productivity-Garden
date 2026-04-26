@@ -7,31 +7,50 @@ function pad2(n: number): string {
   return String(n).padStart(2, "0");
 }
 
-function formatLocalDate(d: Date): string {
-  return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+const APP_TIME_ZONE = process.env.APP_TIME_ZONE || "America/New_York";
+
+function formatAppDate(d: Date): string {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: APP_TIME_ZONE,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(d);
+
+  const year = parts.find((part) => part.type === "year")?.value;
+  const month = parts.find((part) => part.type === "month")?.value;
+  const day = parts.find((part) => part.type === "day")?.value;
+
+  if (!year || !month || !day) {
+    throw new Error(`Could not format date for timezone ${APP_TIME_ZONE}`);
+  }
+
+  return `${year}-${month}-${day}`;
 }
 
-/** Normalize stored task date to YYYY-MM-DD (local). */
+/** Normalize stored task date to YYYY-MM-DD in the app timezone. */
 function normalizeTaskDate(raw: string | null | undefined): string {
   const t = (raw ?? "").trim();
   if (!t || t === "No date") {
-    return formatLocalDate(new Date());
+    return formatAppDate(new Date());
   }
   if (/^\d{4}-\d{2}-\d{2}$/.test(t)) {
     return t;
   }
   const p = new Date(t);
   if (!Number.isNaN(p.getTime())) {
-    return formatLocalDate(p);
+    return formatAppDate(p);
   }
-  return formatLocalDate(new Date());
+  return formatAppDate(new Date());
 }
 
 function nextDayKey(fromIso: string): string {
   const [y, mo, d] = fromIso.split("-").map(Number);
-  const dt = new Date(y, mo - 1, d, 12, 0, 0, 0);
-  dt.setDate(dt.getDate() + 1);
-  return formatLocalDate(dt);
+  const dt = new Date(Date.UTC(y, mo - 1, d));
+  dt.setUTCDate(dt.getUTCDate() + 1);
+  return `${dt.getUTCFullYear()}-${pad2(dt.getUTCMonth() + 1)}-${pad2(
+    dt.getUTCDate(),
+  )}`;
 }
 
 const XP_BY_CATEGORY: Record<string, number> = {
@@ -111,7 +130,7 @@ router.post("/auto-rollover", requireAuth, async (req: AuthRequest, res: Respons
     return;
   }
 
-  const todayKey = formatLocalDate(new Date());
+  const todayKey = formatAppDate(new Date());
 
   try {
     const result = await pool.query(

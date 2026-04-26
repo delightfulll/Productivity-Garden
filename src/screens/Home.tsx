@@ -8,7 +8,7 @@ import React, {
 import "../styles/App.css";
 import Sidebar from "../components/Sidebar";
 import { tasksApi, type Task } from "../lib/api";
-import { motion, Reorder, AnimatePresence } from "framer-motion";
+import { motion, Reorder } from "framer-motion";
 import {
   FaPlus,
   FaGripVertical,
@@ -35,6 +35,7 @@ import { useAuth } from "../context/AuthContext";
 
 type ActiveTab = "tasks" | "habits" | "goals" | "backlog";
 type TaskCategory = "watering" | "sunlight" | "composting";
+type RecentlyAddedTask = { id: number; category: TaskCategory };
 
 interface TaskItemProps {
   task: Task;
@@ -168,8 +169,7 @@ interface TaskSectionProps {
   subtitle: string;
   tasks: Task[];
   category: TaskCategory;
-  layoutAnimationCategory: TaskCategory | null;
-  onActivateLayout: (category: TaskCategory) => void;
+  recentlyAddedTaskId: number | null;
   onReorder: (newOrder: Task[]) => void;
   onComplete: (
     taskId: number,
@@ -188,8 +188,7 @@ const TaskSection = React.memo(
     subtitle,
     tasks,
     category,
-    layoutAnimationCategory,
-    onActivateLayout,
+    recentlyAddedTaskId,
     onReorder,
     onComplete,
     onDelete,
@@ -197,11 +196,6 @@ const TaskSection = React.memo(
     onAddClick,
     taskRefs,
   }: TaskSectionProps) => {
-    const shouldAnimateLayout = layoutAnimationCategory === category;
-    const reorderLayout = (shouldAnimateLayout ? "position" : false) as
-      | "position"
-      | undefined;
-
     return (
       <>
         <div
@@ -211,46 +205,50 @@ const TaskSection = React.memo(
           <h2 className={`section-title section-title-${category}`}>{title}</h2>
         </div>
         <p className="section-subtitle">{subtitle}</p>
-        <Reorder.Group
-          axis="y"
-          values={tasks}
-          onReorder={onReorder}
-          className="task-box"
-          onPointerDownCapture={() => onActivateLayout(category)}
-        >
-          <AnimatePresence initial={false} mode="popLayout">
-            {tasks.map((task) => (
-              <Reorder.Item
-                key={task.id}
-                value={task}
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                // Framer Motion supports false here; Reorder.Item's type omits it.
-                layout={reorderLayout}
-                whileDrag={{
-                  scale: 1.03,
-                }}
-                transition={{
-                  opacity: { duration: 0.18 },
-                  scale: { duration: 0.18 },
-                  layout: {
-                    duration: 0.28,
-                    ease: [0.22, 1, 0.36, 1],
-                  },
-                }}
-              >
-                <TaskItem
-                  task={task}
-                  category={category}
-                  onComplete={onComplete}
-                  onDelete={onDelete}
-                  onRollOver={onRollOver}
-                  taskRefs={taskRefs}
-                />
-              </Reorder.Item>
-            ))}
-          </AnimatePresence>
+        <div className="task-box">
+          <Reorder.Group
+            axis="y"
+            values={tasks}
+            onReorder={onReorder}
+            className="task-list"
+          >
+            {tasks.map((task) => {
+              const isRecentlyAdded = task.id === recentlyAddedTaskId;
+
+              return (
+                <Reorder.Item
+                  key={task.id}
+                  value={task}
+                  initial={
+                    isRecentlyAdded ? { opacity: 0, scale: 0.98 } : false
+                  }
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  layout="position"
+                  whileDrag={{
+                    scale: 1.03,
+                  }}
+                  transition={{
+                    opacity: { duration: 0.18 },
+                    scale: { duration: 0.18 },
+                    layout: {
+                      duration: 0.28,
+                      ease: [0.22, 1, 0.36, 1],
+                    },
+                  }}
+                >
+                  <TaskItem
+                    task={task}
+                    category={category}
+                    onComplete={onComplete}
+                    onDelete={onDelete}
+                    onRollOver={onRollOver}
+                    taskRefs={taskRefs}
+                  />
+                </Reorder.Item>
+              );
+            })}
+          </Reorder.Group>
           <motion.div
             className="add-task-card"
             whileHover={{ scale: 1.02 }}
@@ -260,7 +258,7 @@ const TaskSection = React.memo(
             <FaPlus className="add-task-plus" />
             <span className="add-task-input">Add a new {category} task...</span>
           </motion.div>
-        </Reorder.Group>
+        </div>
       </>
     );
   },
@@ -273,8 +271,8 @@ function Home() {
   const { confirm } = useConfirm();
   const { dayKey, selectedDate, setDayFromDate } = useDayParam();
   const [activeTab, setActiveTab] = useState<ActiveTab>("tasks");
-  const [layoutAnimationCategory, setLayoutAnimationCategory] =
-    useState<TaskCategory | null>(null);
+  const [recentlyAddedTask, setRecentlyAddedTask] =
+    useState<RecentlyAddedTask | null>(null);
   const taskRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
 
   const [wateringTasks, setWateringTasks] = useState<Task[]>([]);
@@ -322,6 +320,16 @@ function Home() {
           .catch((err) => console.error("Failed to load tasks:", err));
       });
   }, []);
+
+  useEffect(() => {
+    if (recentlyAddedTask === null) return;
+
+    const timeoutId = window.setTimeout(() => {
+      setRecentlyAddedTask(null);
+    }, 400);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [recentlyAddedTask]);
 
   const handleTaskComplete = useCallback(
     (taskId: number, category: TaskCategory, currentCompleted: boolean) => {
@@ -372,8 +380,7 @@ function Home() {
         category: activeCategory,
       });
 
-      setLayoutAnimationCategory(activeCategory);
-
+      setRecentlyAddedTask({ id: created.id, category: activeCategory });
       switch (activeCategory) {
         case "watering":
           setWateringTasks((t) => [...t, created]);
@@ -398,7 +405,6 @@ function Home() {
   const handleDeleteTask = useCallback(
     async (taskId: number, category: TaskCategory) => {
       if (!(await confirmDeletion("Delete this task?"))) return;
-      setLayoutAnimationCategory(category);
       switch (category) {
         case "watering":
           setWateringTasks((t) => t.filter((x) => x.id !== taskId));
@@ -454,6 +460,21 @@ function Home() {
       setIsModalOpen(true);
     },
     [dayKey],
+  );
+
+  const handleWateringReorder = useCallback(
+    (next: Task[]) => mergeReorder(setWateringTasks, next),
+    [mergeReorder],
+  );
+
+  const handleSunlightReorder = useCallback(
+    (next: Task[]) => mergeReorder(setSunlightTasks, next),
+    [mergeReorder],
+  );
+
+  const handleCompostingReorder = useCallback(
+    (next: Task[]) => mergeReorder(setCompostingTasks, next),
+    [mergeReorder],
   );
 
   return (
@@ -520,12 +541,12 @@ function Home() {
                 title="Watering Tasks"
                 subtitle="These tasks move the needle"
                 tasks={wateringForDay}
-                layoutAnimationCategory={layoutAnimationCategory}
-                onActivateLayout={setLayoutAnimationCategory}
-                onReorder={(next) => {
-                  setLayoutAnimationCategory("watering");
-                  mergeReorder(setWateringTasks, next);
-                }}
+                recentlyAddedTaskId={
+                  recentlyAddedTask?.category === "watering"
+                    ? recentlyAddedTask.id
+                    : null
+                }
+                onReorder={handleWateringReorder}
                 onComplete={handleTaskComplete}
                 onDelete={handleDeleteTask}
                 onRollOver={handleRollOverTask}
@@ -537,12 +558,12 @@ function Home() {
                 subtitle="These tasks keep your goal alive"
                 tasks={sunlightForDay}
                 category="sunlight"
-                layoutAnimationCategory={layoutAnimationCategory}
-                onActivateLayout={setLayoutAnimationCategory}
-                onReorder={(next) => {
-                  setLayoutAnimationCategory("sunlight");
-                  mergeReorder(setSunlightTasks, next);
-                }}
+                recentlyAddedTaskId={
+                  recentlyAddedTask?.category === "sunlight"
+                    ? recentlyAddedTask.id
+                    : null
+                }
+                onReorder={handleSunlightReorder}
                 onComplete={handleTaskComplete}
                 onDelete={handleDeleteTask}
                 onRollOver={handleRollOverTask}
@@ -554,12 +575,12 @@ function Home() {
                 subtitle="These tasks are extraneous things not necessarily important"
                 tasks={compostingForDay}
                 category="composting"
-                layoutAnimationCategory={layoutAnimationCategory}
-                onActivateLayout={setLayoutAnimationCategory}
-                onReorder={(next) => {
-                  setLayoutAnimationCategory("composting");
-                  mergeReorder(setCompostingTasks, next);
-                }}
+                recentlyAddedTaskId={
+                  recentlyAddedTask?.category === "composting"
+                    ? recentlyAddedTask.id
+                    : null
+                }
+                onReorder={handleCompostingReorder}
                 onComplete={handleTaskComplete}
                 onDelete={handleDeleteTask}
                 onRollOver={handleRollOverTask}

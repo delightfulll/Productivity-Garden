@@ -2,6 +2,12 @@ import { useSearchParams } from "react-router-dom";
 import { useMemo, useCallback, useEffect } from "react";
 import { formatLocalDayKey, parseLocalDayKey } from "../lib/dateUtils";
 
+function msUntilNextLocalMidnight(now: Date): number {
+  const nextMidnight = new Date(now);
+  nextMidnight.setHours(24, 0, 0, 0);
+  return nextMidnight.getTime() - now.getTime();
+}
+
 /**
  * Selected calendar day for Home + sidebar calendar, synced to `?day=YYYY-MM-DD`.
  */
@@ -19,6 +25,19 @@ export function useDayParam() {
       setSearchParams({ day: formatLocalDayKey(new Date()) }, { replace: true });
     }
   }, [raw, setSearchParams]);
+
+  useEffect(() => {
+    const now = new Date();
+    const todayKey = formatLocalDayKey(now);
+
+    if (dayKey !== todayKey) return;
+
+    const timeoutId = window.setTimeout(() => {
+      setSearchParams({ day: formatLocalDayKey(new Date()) }, { replace: true });
+    }, msUntilNextLocalMidnight(now) + 1000);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [dayKey, setSearchParams]);
 
   const setDayFromDate = useCallback(
     (d: Date) => {
