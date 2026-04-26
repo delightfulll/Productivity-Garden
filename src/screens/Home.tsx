@@ -198,6 +198,9 @@ const TaskSection = React.memo(
     taskRefs,
   }: TaskSectionProps) => {
     const shouldAnimateLayout = layoutAnimationCategory === category;
+    const reorderLayout = (shouldAnimateLayout ? "position" : false) as
+      | "position"
+      | undefined;
 
     return (
       <>
@@ -223,7 +226,8 @@ const TaskSection = React.memo(
                 initial={{ opacity: 0, y: -8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                layout={shouldAnimateLayout ? "position" : undefined}
+                // Framer Motion supports false here; Reorder.Item's type omits it.
+                layout={reorderLayout}
                 whileDrag={{
                   scale: 1.03,
                 }}
